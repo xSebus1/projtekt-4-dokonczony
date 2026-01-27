@@ -2,7 +2,67 @@ import random
 import os
 import time
 
+display = ""
+
+index = 0
+
+czas = 5
+
+print("SNAKE.PY")
+
+print("-----* {🐍} *-----")
+
+print("Wybierz poziom: ")
+
+print("1) Łatwy%newline%2) Średni%newline% 3) Trudny\n")
+
+poziom = input("Wprowadz poziom <1| 2| 3|>: ").lower()
+
+if poziom == "1" or "2" or "3":
+    if poziom == "1":
+        display = "łatwy"
+
+    if poziom == "2":
+        display = "Średni"
+
+    if poziom == "3":
+        display = "Trudny"
+
+    print("Wybrano poziom", display)
+    time.sleep(1)
+
+for i in range(5):
+    if index == 1:
+        print(f"Trwa ładowanie... -", end="\r" )
+        index = 0
+        time.sleep(0.5)
+    if index == 0:
+        print(f"Trwa ładowanie... |", end="\r" )
+        index = 1
+        time.sleep(0.5)
+    time.sleep(0.5)
+
+print("Załadowano zaczynamy za!", czas)
+
+for i in range(5):
+    czas = 5 - i
+    print("Gra rozpocznie się za:", czas, "sek", end="\r")
+    time.sleep(1)
+    if czas == 0:
+        break
+
 pkt = 0
+
+
+WIDTH = 20
+HEIGHT = 10
+
+snake = [(5, 5), (5, 4), (5, 3)]
+direction = "d"
+
+food = (random.randint(0, HEIGHT-1), random.randint(0, WIDTH-1))
+superfood = (random.randint(0, round((HEIGHT - 1) / 2)), random.randint(0, round((WIDTH - 1) / 2)))
+
 
 def color_text(text, color = "RED"):
     """
@@ -22,17 +82,6 @@ def color_text(text, color = "RED"):
     elif color == "ORANGE":
         return '\033[93m'+text+'\033[0m'
 
-print(color_text("Przykładowy tekst", "RED"))
-
-WIDTH = 20
-HEIGHT = 10
-
-snake = [(5, 5), (5, 4), (5, 3)]
-direction = "d"
-
-food = (random.randint(0, HEIGHT-1), random.randint(0, WIDTH-1))
-superfood = (random.randint(0, round((HEIGHT - 1) / 2)), random.randint(0, round((WIDTH - 1) / 2)))
-
 def render_board(HEIGHT = HEIGHT, WIDTH = WIDTH):
     print("Twoje punkty:", pkt)
 
@@ -40,10 +89,12 @@ def render_board(HEIGHT = HEIGHT, WIDTH = WIDTH):
         for x in range(WIDTH):
             if (y, x) == food:
                 print(color_text("@"), end="")
-            elif (x, y) in snake:
+            elif (y, x) in snake:
                 print(color_text("#", "RED"))
+                if (y, x) in snake[0]:
+                    print("^", "GREEN")
             elif (y, x) == superfood and food not in superfood:
-                print(color_text("%", "ORANGE"))
+                print(color_text("%", "ORANGE"), end="")
                 continue
             else:
                 print(" ", end="")
